@@ -13,7 +13,7 @@ namespace Concurrent
         static int y = 0;
         static int z = 0;
         static Await await = new Await();
-        private static Mutex mut = new Mutex();
+        private static MyMutex mut = new MyMutex();
 
         /// <summary>
         /// The main entry point for the application.
@@ -47,8 +47,8 @@ namespace Concurrent
                         x = 1;
                         Thread.Sleep(500);
                         y = 3;
-                        mut.ReleaseMutex();
                         @await.notify(true);
+                        mut.ReleaseMutex();
                     }));
 
 
