@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Concurrent
 {
     static class Program
     {
-        private static readonly object balanceLock = new object();
         static int x = 0;
         static int y = 0;
         static int z = 0;
         static Await await = new Await();
-        private static MyMutex mut = new MyMutex();
+        private static Mutex mut = new Mutex();
 
         /// <summary>
         /// The main entry point for the application.
@@ -25,40 +25,32 @@ namespace Concurrent
             {
                 x = y = z = 0;
 
-                Thread s1 = new Thread(new ParameterizedThreadStart(
-                    //Thread method
-                    delegate
-                    {
-                        await.await(x > 0 && y > 0);
-                        mut.WaitOne();
-                        Thread.Sleep(500);
-                        z = x + y;
-                        mut.ReleaseMutex();
-                    }));
+                Task s1 = Task.Run(() =>
+                {
+                    await.await(x > 0 && y > 0);
+                    mut.WaitOne();
+                    Task.Delay(500);
+                    z = x + y;
+                    mut.ReleaseMutex();
+                });
 
 
-                Thread s2 = new Thread(new ParameterizedThreadStart(
-                    //Thread method
-                    delegate
-                    {
-                        Thread.Sleep(500);
-                        mut.WaitOne();
-                        Thread.Sleep(500);
-                        x = 1;
-                        Thread.Sleep(500);
-                        y = 3;
-                        @await.notify(true);
-                        mut.ReleaseMutex();
-                    }));
-
-
-                s2.Start();
-                s1.Start();
+                Task s2 = Task.Run(() =>
+                {
+                    Task.Delay(500);
+                    mut.WaitOne();
+                    Task.Delay(500);
+                    x = 1;
+                    Task.Delay(500);
+                    y = 3;
+                    mut.ReleaseMutex();
+                });
+                s2.GetAwaiter().OnCompleted(() => @await.notify(true));
 
                 try
                 {
-                    s1.Join();
-                    s2.Join();
+                    s1.Wait();
+                    s2.Wait();
                     Console.WriteLine(i + ". z = " + x + "+" + y + " = " + z);
                 }
                 catch (Exception e)
