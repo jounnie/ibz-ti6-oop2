@@ -18,12 +18,11 @@ namespace ADOBeispiel
             //1. Variante 
             // Create the Command
             SQLiteCommand command = connection.CreateCommand();
-            command.CommandText = "SELECT Title FROM Album";
+            command.CommandText = "SELECT T.Name FROM Album JOIN Track T on Album.AlbumId = T.AlbumId ORDER BY T.Name";
 
             connection.Open();
 
             SQLiteDataReader reader = command.ExecuteReader();
-
             
             while (reader.Read())
             {

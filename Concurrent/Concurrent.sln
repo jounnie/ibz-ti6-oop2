@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "day2", "..\day2\day2.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAdapter", "..\Beispiele\ADO.NET\DataAdapter\DataAdapter.csproj", "{67271720-62C6-4B9B-A8E8-E496D01024A8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadQuery", "..\Beispiele\ADO.NET\ReadQuery\ReadQuery.csproj", "{67271720-62C6-4B9B-A8E8-E496D01024A8}"
+EndProject
 
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
