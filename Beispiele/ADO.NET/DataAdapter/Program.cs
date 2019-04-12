@@ -18,10 +18,8 @@ namespace ADOBeispiel
             Console.WriteLine("DataSet Example!!!");
             Console.WriteLine("------------------");
 
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT Title FROM Album", connection);
-
+            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter("SELECT Title FROM Album ORDER BY Title ASC", connection);
             DataSet dataSet = new DataSet();
-
             dataAdapter.Fill(dataSet);
 
             foreach (DataRow dataRow in dataSet.Tables[0].Rows)
@@ -29,10 +27,7 @@ namespace ADOBeispiel
                 Console.WriteLine(" Title:{0}", dataRow[0].ToString());
             }
 
-            Thread.Sleep(10000);
-
             connection.Close();
-
         }
     }
 }
